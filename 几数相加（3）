@@ -1,0 +1,152 @@
+给定一个包含 n 个整数的数组 nums，判断 nums 中是否存在三个元素 a，b，c ，使得 a + b + c = 0 ？找出所有满足条件且不重复的三元组。
+
+例如, 给定数组 nums = [-1, 0, 1, 2, -1, -4]，
+
+满足要求的三元组集合为：
+[
+  [-1, 0, 1],
+  [-1, -1, 2]
+]
+//code1
+用到sort 排序
+先排序，然后判别
+如果开始就大于0直接停止
+数组中有两数重复，不需要重新判断，跳过
+class Solution {
+public:
+    vector<vector<int>> threeSum(vector<int>& nums) {
+        sort(nums.begin(), nums.end());
+        int N = nums.size();
+        vector<vector<int> > res;
+        for (int i = 0; i < N - 2; i++) {
+            if (nums[i] > 0) break;
+            if (i > 0 && nums[i] == nums[i - 1]) continue;
+            //判断i位后面的，一前一后
+            int l = i + 1;
+            int r = N - 1;
+            while (l < r) {
+                int s = nums[i] + nums[l] + nums[r];
+                if (s > 0) {
+                    --r;
+                } else if (s < 0) {
+                    ++l;
+                } else {
+                    res.push_back({nums[i], nums[l], nums[r]});
+                    while (l < r && nums[l] == nums[++l]);
+                    while (l < r && nums[r] == nums[--r]);
+                }
+            }
+        }
+        return res;
+    }
+};
+
+//code2
+class Solution {
+public:
+    vector<vector<int>> threeSum(vector<int>& nums) {
+        vector<vector<int> >res;
+        sort(nums.begin(),nums.end());
+        if(nums.empty() || nums.front()>0 || nums.back()<0)
+            return {};
+        
+        for(int i=0;i<nums.size();i++){
+            int fix=nums[i];
+            if(fix>0)   break;
+            if(i>0 && fix==nums[i-1])    continue;
+            //对撞指针
+            int l=i+1,r=nums.size()-1;
+            while(l<r){
+                if(nums[l]+nums[r]==-fix  ){
+                    if(l==i+1 || r==nums.size()-1){
+                        res.push_back(vector<int>{nums[i],nums[l],nums[r]});
+                        l++;r--;
+                    }
+                    else if(nums[l]==nums[l-1])
+                        l++;
+                    else if(nums[r]==nums[r+1])
+                        r--;
+                    else{
+                        res.push_back(vector<int>{nums[i],nums[l],nums[r]});
+                        l++;r--;
+                    }
+                    
+                }
+                else if(nums[l]+nums[r]<-fix)
+                    l++;
+                else
+                    r--;
+            }
+        }
+        return res;
+    }
+};
+
+
+
+
+//################sort
+1、sort函数可以三个参数也可以两个参数，必须的头文件#include < algorithm>和using namespace std;
+2、类似快排的方法，时间复杂度为n*log2(n)
+3、Sort函数有三个参数：（第三个参数可不写）
+（1）第一个是要排序的数组的起始地址。
+（2）第二个是结束的地址（最后一位要排序的地址）
+（3）第三个参数是排序的方法，可以是从大到小也可是从小到大，还可以不写第三个参数，此时默认的排序方法是从小到大排序。
+
+【两个参数】
+#include <iostream>
+#include <algorithm>
+int main()
+{
+ int a[20]={2,4,1,23,5,76,0,43,24,65},i;
+ for(i=0;i<20;i++)
+  cout<<a[i]<<endl;
+ sort(a,a+20);
+ for(i=0;i<20;i++)
+ cout<<a[i]<<endl;
+ return 0;
+}
+【三个参数】
+// sort algorithm example
+#include <iostream>     // std::cout
+#include <algorithm>    // std::sort
+#include <vector>       // std::vector
+//先写判别
+bool myfunction (int i,int j) { return (i<j); }//升序排列
+bool myfunction2 (int i,int j) { return (i>j); }//降序排列
+//也可以用结构体
+struct myclass {
+  bool operator() (int i,int j) { return (i<j);}
+} myobject;
+
+int main () {
+    int myints[8] = {32,71,12,45,26,80,53,33};
+  std::vector<int> myvector (myints, myints+8);               // 32 71 12 45 26 80 53 33
+
+  // using default comparison (operator <):
+  std::sort (myvector.begin(), myvector.begin()+4);           //(12 32 45 71)26 80 53 33
+
+  // using function as comp
+  std::sort (myvector.begin()+4, myvector.end(), myfunction); // 12 32 45 71(26 33 53 80)
+    //std::sort (myints,myints+8,myfunction);不用vector的用法
+
+  // using object as comp
+  std::sort (myvector.begin(), myvector.end(), myobject);     //(12 26 32 33 45 53 71 80)
+
+  // print out content:
+  std::cout << "myvector contains:";
+  for (std::vector<int>::iterator it=myvector.begin(); it!=myvector.end(); ++it)//输出
+    std::cout << ' ' << *it;
+  std::cout << '\n';
+
+  return 0;
+}
+
+
+
+
+
+
+
+
+
