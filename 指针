@@ -1,0 +1,30 @@
+《1》链表问题
+为什么需要使用指向指针的指针来传递参数？
+因为在函数过程中可能会更改表头的地址指针，如果直接传递指针的话就是按值传递，只能改变指针指向的内存值并不能改变指针本身，只有使用一个指向指针的指针来传递传递参数才能改变表头的指针。
+
+#include<iostream>
+using namespace std;
+int main() {
+	int a = 5;
+	int *pa = &a;
+	//int *paa =a;是错误的int不能用来初始化指针
+	int *paaa = pa;
+	int **paaaa =& pa;
+	int **paaaaa = &paaa;
+	cout << a << endl;
+	cout << pa << endl;
+	cout << *pa << endl;
+	cout << paaa << endl;
+	cout << paaaa << endl;
+	cout << paaaaa << endl;
+	getchar();
+}
+
+result:
+5
+0077F7C8
+5
+0077F7C8
+0077F7CC
+0077F7C4
+
